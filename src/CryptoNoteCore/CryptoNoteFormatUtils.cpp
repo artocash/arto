@@ -505,8 +505,8 @@ bool get_block_longhash(cn_context &context, const Block& b, Hash& res) {
     return false;
   }
 
-  // V3 Slowhash adaption
-  const int cn_variant = b.majorVersion >= 3 ? 3 : 0;
+  // New PoW Adaption
+  const int cn_variant = b.majorVersion >= 4 ? 4 : 0;
   cn_slow_hash(context, bd.data(), bd.size(), res, cn_variant);
   
   return true;
