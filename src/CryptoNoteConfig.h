@@ -125,7 +125,8 @@ const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "0000000000000000
 
 const char* const SEED_NODES[] = { 
   "seed1.arto.cash:19450",
-  "seed2.arto.cash:19450"
+  "seed2.arto.cash:19450",
+  "seed3.arto.cash:19450"
 };
 
 struct CheckpointData {
@@ -134,7 +135,12 @@ struct CheckpointData {
 };
 
 const std::initializer_list<CheckpointData> CHECKPOINTS = { 
-  //{3436,	"gg0348c379f63af68304f9f256ea99cc8560eda5d257df0dc7ff9f631fc7fgf5d" }
+  {10000,	"836f6827fbd1fce66f53d91f2cc965fb8eab8e44768946ea8391de1ecfbe7962" },
+  {20000,	"de6a83a83b0f9a1d401e0fe478551f7a8570e063711c49b788f4327c26b64fb3" },
+  {30000,	"fcf50f9575ee249b3942bef035ba264d26f6fbcd8fbe9432a6c87c284d27682e" },
+  {40000,	"003ca2a68b1657b5c3c97cfb213d5a9856101a1eabfd74cfbd0a85e58f587659" },
+  {50000,	"dbd607d6151c3cd55c8caa8d61f68d2afa9e67e9707dce489d3dc7dcd3d72eec" },
+  {60000,	"b84e3e8fa7330a46453a527e2c07404b5b718275c2c63b32019a382b7d417c19" }
 };
 
 } // CryptoNote

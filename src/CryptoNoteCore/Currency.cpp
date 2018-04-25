@@ -135,7 +135,7 @@ namespace CryptoNote {
 			return m_upgradeHeightV3;
 		}
 		else if (majorVersion == BLOCK_MAJOR_VERSION_4) {
-            return m_upgradeHeightV4;
+			return m_upgradeHeightV4;
 		}
 		else {
 			return static_cast<uint32_t>(-1);
