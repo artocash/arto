@@ -311,21 +311,19 @@ struct COMMAND_RPC_STOP_DAEMON {
 //-----------------------------------------------
 struct COMMAND_RPC_GET_FEE_ADDRESS {
   typedef EMPTY_STRUCT request;
-
   struct response {
     std::string fee_address;
-	std::string status;
+    std::string status;
 
     void serialize(ISerializer &s) {
       KV_MEMBER(fee_address)
-	  KV_MEMBER(status)
+      KV_MEMBER(status)
     }
   };
 };
 
 struct COMMAND_RPC_GETBLOCKCOUNT {
   typedef std::vector<std::string> request;
-
   struct response {
     uint64_t count;
     std::string status;
@@ -474,7 +472,7 @@ struct f_block_short_response {
     KV_MEMBER(hash)
     KV_MEMBER(cumul_size)
     KV_MEMBER(tx_count)
-	KV_MEMBER(difficulty)
+    KV_MEMBER(difficulty)
   }
 };
 
@@ -530,8 +528,6 @@ struct COMMAND_RPC_GET_LAST_BLOCK_HEADER {
   typedef EMPTY_STRUCT request;
   typedef BLOCK_HEADER_RESPONSE response;
 };
-
-
 
 struct COMMAND_RPC_GET_BLOCK_HEADER_BY_HASH {
   struct request {
@@ -592,6 +588,23 @@ struct F_COMMAND_RPC_GET_BLOCK_DETAILS {
 
     void serialize(ISerializer &s) {
       KV_MEMBER(block)
+      KV_MEMBER(status)
+    }
+  };
+};
+
+struct K_COMMAND_RPC_GET_TRANSACTIONS_BY_PAYMENT_ID {
+  struct request {
+    std::string payment_id;
+    void serialize(ISerializer &s) {
+      KV_MEMBER(payment_id)
+    }
+  };
+  struct response {
+    std::vector<f_transaction_short_response> transactions;
+    std::string status;
+    void serialize(ISerializer &s) {
+      KV_MEMBER(transactions)
       KV_MEMBER(status)
     }
   };
