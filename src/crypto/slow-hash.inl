@@ -73,10 +73,8 @@ cn_slow_hash_noaesni
   // Magic Start
   int speed_factor = 1;
   if (variant > 1) { // 2MB
-	  speed_factor = 1;
   }
   else if (variant == -1) { // 1MB Light
-	  speed_factor = 2;
   }
 
   unsigned int ACTUAL_MEMORY = MEMORY / speed_factor;
@@ -166,12 +164,12 @@ cn_slow_hash_noaesni
     b_x = _mm_xor_si128(b_x, c_x);
     _mm_store_si128((__m128i *)&ctx->long_state[a[0] & ACTUAL_MASK], b_x);
 
-	//VARIANT1_1(&ctx->long_state[a[0] & ACTUAL_MASK]);
-	VARIANT1_1(&ctx->long_state[a[0] & ACTUAL_MASK]);
+    //VARIANT1_1(&ctx->long_state[a[0] & ACTUAL_MASK]);
+    VARIANT1_1(&ctx->long_state[a[0] & ACTUAL_MASK]);
 
-	// ---- THE GREAT WALL OF ITERATION
+    // ---- THE GREAT WALL OF ITERATION
 
-	// Swap blocks
+    // Swap blocks
     nextblock = (uint64_t *)&ctx->long_state[c[0] & ACTUAL_MASK];
     b[0] = nextblock[0];
     b[1] = nextblock[1];
@@ -195,21 +193,20 @@ cn_slow_hash_noaesni
       a[1] += lo;
     }
 
-	// DST === NEXTBLOCK === p (?)
+    // DST === NEXTBLOCK === p (?)
 
-	dst = (uint64_t *)&ctx->long_state[c[0] & ACTUAL_MASK];
+    dst = (uint64_t *)&ctx->long_state[c[0] & ACTUAL_MASK];
     dst[0] = a[0];
     dst[1] = a[1];
 
     a[0] ^= b[0];
     a[1] ^= b[1];
 
-	VARIANT1_2(dst + 1);
+    VARIANT1_2(dst + 1);
 
-	if (variant > 2) // RTO Variant
-	{
-		*(dst + 1) ^= *(dst);
-	}
+    if (variant > 2) // RTO Variant
+    {
+    }
 
     b_x = c_x;
 
