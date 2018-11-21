@@ -73,8 +73,10 @@ cn_slow_hash_noaesni
   // Magic Start
   int speed_factor = 1;
   if (variant > 1) { // 2MB
+    speed_factor = 1;
   }
   else if (variant == -1) { // 1MB Light
+    speed_factor = 2;
   }
 
   unsigned int ACTUAL_MEMORY = MEMORY / speed_factor;
@@ -206,6 +208,7 @@ cn_slow_hash_noaesni
 
     if (variant > 2) // RTO Variant
     {
+      *(dst + 1) ^= *(dst);
     }
 
     b_x = c_x;
