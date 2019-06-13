@@ -671,7 +671,13 @@ std::error_code WalletService::getTransactions(const std::vector<std::string>& a
 
     Crypto::Hash blockHash = parseHash(blockHashString, logger);
 
-    transactions = getRpcTransactions(blockHash, blockCount, transactionFilter);
+	std::vector<TransactionsInBlockRpcInfo> txs = getRpcTransactions(blockHash, blockCount, transactionFilter);
+	for (TransactionsInBlockRpcInfo& b : txs){
+		for (TransactionRpcInfo& t : b.transactions){
+			t.confirmations = wallet.getBlockCount() - t.blockIndex;
+		}
+	}
+	transactions = txs;
   } catch (std::system_error& x) {
     logger(Logging::WARNING, Logging::BRIGHT_YELLOW) << "Error while getting transactions: " << x.what();
     return x.code();
@@ -695,7 +701,13 @@ std::error_code WalletService::getTransactions(const std::vector<std::string>& a
 
     TransactionsInBlockInfoFilter transactionFilter(addresses, paymentId);
 
-    transactions = getRpcTransactions(firstBlockIndex, blockCount, transactionFilter);
+	std::vector<TransactionsInBlockRpcInfo> txs = getRpcTransactions(firstBlockIndex, blockCount, transactionFilter);
+	for (TransactionsInBlockRpcInfo& b : txs){
+		for (TransactionRpcInfo& t : b.transactions){
+			t.confirmations = wallet.getBlockCount() - t.blockIndex;
+		}
+	}
+	transactions = txs;
   } catch (std::system_error& x) {
     logger(Logging::WARNING, Logging::BRIGHT_YELLOW) << "Error while getting transactions: " << x.what();
     return x.code();
@@ -719,7 +731,10 @@ std::error_code WalletService::getTransaction(const std::string& transactionHash
       return make_error_code(CryptoNote::error::OBJECT_NOT_FOUND);
     }
 
-    transaction = convertTransactionWithTransfersToTransactionRpcInfo(transactionWithTransfers);
+	TransactionRpcInfo tempTrans = convertTransactionWithTransfersToTransactionRpcInfo(transactionWithTransfers);
+	tempTrans.confirmations = wallet.getBlockCount() - transactionWithTransfers.transaction.blockHeight;
+	transaction = tempTrans;
+
   } catch (std::system_error& x) {
     logger(Logging::WARNING, Logging::BRIGHT_YELLOW) << "Error while getting transaction: " << x.what();
     return x.code();
