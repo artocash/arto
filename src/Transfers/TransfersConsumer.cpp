@@ -376,9 +376,9 @@ void TransfersConsumer::removeUnconfirmedTransaction(const Crypto::Hash& transac
 }
 
 void TransfersConsumer::addPublicKeysSeen(const Crypto::Hash& transactionHash, const Crypto::PublicKey& outputKey) {
-	std::lock_guard<std::mutex> lk(seen_mutex);
-    transactions_hash_seen.insert(transactionHash);
-    public_keys_seen.insert(outputKey);
+  std::lock_guard<std::mutex> lk(seen_mutex);
+  transactions_hash_seen.insert(transactionHash);
+  public_keys_seen.insert(outputKey);
 }
 
 std::error_code TransfersConsumer::createTransfers(
@@ -452,12 +452,12 @@ std::error_code TransfersConsumer::createTransfers(
       MultisignatureOutput out;
       tx.getOutput(idx, out, amount);
 
-	  for (const auto& key : out.keys) {
+      for (const auto& key : out.keys) {
         std::unordered_set<Crypto::Hash>::iterator it = transactions_hash_seen.find(txHash);
         if (it == transactions_hash_seen.end()) {
           std::unordered_set<Crypto::PublicKey>::iterator key_it = public_keys_seen.find(key);
           if (key_it != public_keys_seen.end()) {
-			  m_logger(ERROR, BRIGHT_RED) << "Failed to process transaction " << Common::podToHex(txHash) << ": duplicate multisignature output key is found";
+            m_logger(ERROR, BRIGHT_RED) << "Failed to process transaction " << Common::podToHex(txHash) << ": duplicate multisignature output key is found";
             return std::error_code();
           }
           if (std::find(temp_keys.begin(), temp_keys.end(), key) != temp_keys.end()) {
