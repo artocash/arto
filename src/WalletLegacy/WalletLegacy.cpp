@@ -1,5 +1,6 @@
 // Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers
 // Copyright (c) 2017-2018, Karbo developers
+// Copyright (c) 2018-2019, The Arto Developers
 // 
 // All rights reserved.
 // 
@@ -106,6 +107,8 @@ private:
 };
 
 } //namespace
+
+using namespace Logging;
 
 namespace CryptoNote {
 
@@ -287,6 +290,18 @@ void WalletLegacy::doLoad(std::istream& source) {
     } catch (const std::exception&) {
       // ignore cache loading errors
     }
+	
+	// Read all output keys cache
+    std::vector<TransactionOutputInformation> allTransfers;
+    m_transferDetails->getOutputs(allTransfers, ITransfersContainer::IncludeAll);
+    auto message = "Loaded " + std::to_string(allTransfers.size()) + " known transfer(s)\r\n";
+    m_loggerGroup("WalletLegacy", INFO, boost::posix_time::second_clock::local_time(), message);
+    for (auto& o : allTransfers) {
+      if (o.type != TransactionTypes::OutputType::Invalid) {
+        m_transfersSync.addPublicKeysSeen(m_account.getAccountKeys().address, o.transactionHash, o.outputKey);
+      }
+    }	
+	
   } catch (std::system_error& e) {
     runAtomic(m_cacheMutex, [this] () {this->m_state = WalletLegacy::NOT_INITIALIZED;} );
     m_observerManager.notify(&IWalletLegacyObserver::initCompleted, e.code());
